@@ -41,7 +41,7 @@ namespace GunGame
         public PlayerLanguageManager playerLanguageManager = new ();
 
         public override string ModuleName => "CS2_GunGame";
-        public override string ModuleVersion => "v1.2.0-beta.1";
+        public override string ModuleVersion => "v1.2.0-beta.2";
         public override string ModuleAuthor => "Sergey";
         public override string ModuleDescription => "GunGame mode for CS2";
 
@@ -3706,7 +3706,6 @@ namespace GunGame
         [CommandHelper(whoCanExecute: CommandUsage.SERVER_ONLY)]
         public void OnRespawnDistance(CCSPlayerController? playerController, CommandInfo command)
         {
-            if (playerController == null || !playerController.IsValid) { return; }
             if (command.ArgCount < 2) { return; }
 
             if (double.TryParse(command.GetArg(1), out double distance))

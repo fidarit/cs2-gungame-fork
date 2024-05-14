@@ -1,6 +1,5 @@
 ﻿#pragma warning disable CS8981// Naming Styles
 using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
 using Microsoft.Extensions.Logging;
 
@@ -20,15 +19,15 @@ namespace GunGame.Tools
         {
             if (slot < 0 || slot > Models.Constants.MaxPlayers)
                 return null;
-            GGPlayer? player;
+
+            GGPlayer player;
             lock (lockObject)
             {
-                if (!playerMap.TryGetValue(slot, out GGPlayer? pl))
+                if (!playerMap.TryGetValue(slot, out player))
                 {
-                    pl = new GGPlayer(slot, Plugin);
-                    playerMap.Add(slot, pl);
+                    player = new GGPlayer(slot, Plugin);
+                    playerMap.Add(slot, player);
                 }
-                player = pl;
             }
             if (player.Index == -1)
             {
@@ -86,10 +85,7 @@ namespace GunGame.Tools
         {
             lock (lockObject)
             {
-                if (playerMap.TryGetValue(slot, out GGPlayer? player))
-                {
-                    playerMap.Remove(slot);
-                }
+                playerMap.Remove(slot);
             }
         }
 
@@ -97,30 +93,19 @@ namespace GunGame.Tools
         {
             double dist = double.MaxValue;
 
-            if (playerMap.Count <= 1)
-                return dist;
-
-            foreach (var player in playerMap)
+            foreach (var player in playerMap.Values)
             {
-                if (player.Value.Slot == slot)
+                if (player.Slot == slot)
                     continue;
 
-                var pc = Utilities.GetPlayerFromSlot(player.Value.Slot);
-                if (pc == null || !Plugin.IsValidPlayer(pc))
-                    continue;
-
-                if (pc.PlayerPawn?.Value?.AbsOrigin == null || !pc.PlayerPawn.IsValid)
+                var pc = Utilities.GetPlayerFromSlot(player.Slot);
+                if (pc?.PlayerPawn?.Value?.AbsOrigin == null)
                     continue;
 
                 dist = Math.Min(dist, PlayerDistance(spawn, pc.PlayerPawn.Value.AbsOrigin));
             }
 
             return dist;
-        }
-
-        public bool IsPlayerNearby(int slot, Vector spawn, double minDistance = 39.0)
-        {
-            return GetDistanceToClosestPlayer(slot, spawn) < minDistance;
         }
 
         private static double PlayerDistance(Vector entity, Vector player)

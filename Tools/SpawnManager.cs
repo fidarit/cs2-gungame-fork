@@ -1,10 +1,10 @@
-﻿using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API;
+﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Utils;
+using GunGame.Extensions;
 using GunGame.Models;
 using GunGame.Variables;
 using Microsoft.Extensions.Logging;
-using GunGame.Extensions;
-using CounterStrikeSharp.API.Modules.Utils;
 
 namespace GunGame.Tools
 {
@@ -64,7 +64,6 @@ namespace GunGame.Tools
             if (!Plugin.IsValidPlayer(player))
                 return;
 
-            CCSPlayerController pl = player;
             if ((Config.RespawnByPlugin == RespawnType.OnlyT && player.TeamNum != 2)
                 || (Config.RespawnByPlugin == RespawnType.OnlyCT && player.TeamNum != 3)
                 || (player.TeamNum != 2 && player.TeamNum != 3))
@@ -73,27 +72,27 @@ namespace GunGame.Tools
             }
             Plugin.AddTimer(1.0f, () =>
             {
-                if (!Plugin.IsValidPlayer(pl) || pl.PlayerPawn == null || !pl.PlayerPawn.IsValid || pl.PlayerPawn.Value == null)
+                if (!Plugin.IsValidPlayer(player) || player?.PlayerPawn?.Value?.IsValid != true)
                     return;
 
                 double thisDeathTime = Server.EngineTime;
-                double deltaDeath = thisDeathTime - Plugin.LastDeathTime[pl.Slot];
-                Plugin.LastDeathTime[pl.Slot] = thisDeathTime;
+                double deltaDeath = thisDeathTime - Plugin.LastDeathTime[player.Slot];
+                Plugin.LastDeathTime[player.Slot] = thisDeathTime;
                 if (deltaDeath < 0)
                 {
-                    Logger.LogError($"CRITICAL: Delta death is negative for slot {pl.Slot}!!!");
+                    Logger.LogError($"CRITICAL: Delta death is negative for slot {player.Slot}!!!");
                     return;
                 }
                 SpawnInfo spawn = null!;
-                if ((pl.TeamNum == 2 || pl.TeamNum == 3) && spawnpoint)
+                if ((player.TeamNum == 2 || player.TeamNum == 3) && spawnpoint)
                 {
-                    spawn = GetSuitableSpawnPoint(pl.Slot, pl.TeamNum, Config.SpawnDistance);
+                    spawn = GetSuitableSpawnPoint(player.Slot, player.TeamNum, Config.SpawnDistance);
                     if (spawn == null)
                     {
-                        Logger.LogError($"Spawn point not found for {pl.PlayerName} ({pl.Slot})");
+                        Logger.LogError($"Spawn point not found for {player.PlayerName} ({player.Slot})");
                     }
                 }
-                pl.Respawn();
+                player.Respawn();
                 if (spawn != null)
                 {
                     player.PlayerPawn.Value!.Teleport(spawn.Position, spawn.Rotation, new Vector(0, 0, 0));
@@ -125,7 +124,7 @@ namespace GunGame.Tools
                 }
             }
 
-            SpawnInfo result;
+            SpawnInfo? result;
 
             if (Config.RespawnByPlugin == RespawnType.AllFarthest)
                 result = GetFarthestSpawnPoint(slot, spawns);
@@ -144,10 +143,10 @@ namespace GunGame.Tools
 
             // Shuffle the copy
             shuffledSpawns.Shuffle();
-            foreach (var spawn in shuffledSpawns)
+            foreach (var (point, distance) in shuffledSpawns)
             {
-                if (spawn.distance > minDistance)
-                    return spawn.point;
+                if (distance > minDistance)
+                    return point;
             }
 
             return shuffledSpawns
@@ -156,28 +155,13 @@ namespace GunGame.Tools
                 .FirstOrDefault()!;
         }
         
-        private SpawnInfo GetFarthestSpawnPoint(int slot, List<SpawnInfo> value)
+        private SpawnInfo? GetFarthestSpawnPoint(int slot, List<SpawnInfo> value)
         {
-            // Shuffle the spawn points list to randomize the selection process
-            var shuffledSpawns = new List<SpawnInfo>(value);
-
-            // Shuffle the copy
-            shuffledSpawns.Shuffle();
-
-            SpawnInfo result = null!;
-            double distanceToResultPoint = 0;
-
-            foreach (var spawn in shuffledSpawns)
-            {
-                var distance = PlayerManager.GetDistanceToClosestPlayer(slot, spawn.Position);
-                if (distance <= distanceToResultPoint)
-                    continue;
-
-                distanceToResultPoint = distance;
-                result = spawn;
-            }
-
-            return result;
+            return value
+                .Select(t => (point: t, distance: PlayerManager.GetDistanceToClosestPlayer(slot, t.Position)))
+                .OrderByDescending(t => t.distance)
+                .Select(t => t.point!)
+                .FirstOrDefault();
         }
 
         public void SetSpawnRules(int spawnType)
