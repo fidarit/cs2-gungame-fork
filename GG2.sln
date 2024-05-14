@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34714.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GG2", "GG2.csproj", "{35389D5B-8BD9-46F0-A78C-CA6C4703E7D7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GunGameAPI", "GunGameAPI\GunGameAPI.csproj", "{20C784AD-FF09-44DC-BA97-AA4420B0F52D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35389D5B-8BD9-46F0-A78C-CA6C4703E7D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35389D5B-8BD9-46F0-A78C-CA6C4703E7D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35389D5B-8BD9-46F0-A78C-CA6C4703E7D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35389D5B-8BD9-46F0-A78C-CA6C4703E7D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20C784AD-FF09-44DC-BA97-AA4420B0F52D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20C784AD-FF09-44DC-BA97-AA4420B0F52D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20C784AD-FF09-44DC-BA97-AA4420B0F52D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20C784AD-FF09-44DC-BA97-AA4420B0F52D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B2A415E9-8E31-4E81-8935-4F9A23F27A7C}
+	EndGlobalSection
+EndGlobal
