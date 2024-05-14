@@ -15,7 +15,6 @@ using CounterStrikeSharp.API.Modules.Menu;
 using CounterStrikeSharp.API.Modules.Timers;
 using CounterStrikeSharp.API.Modules.Utils;
 using GunGame.API;
-using GunGame.Extensions;
 using GunGame.Models;
 using GunGame.Stats;
 using GunGame.Tools;
@@ -42,7 +41,7 @@ namespace GunGame
         public PlayerLanguageManager playerLanguageManager = new ();
 
         public override string ModuleName => "CS2_GunGame";
-        public override string ModuleVersion => "v1.2.0-beta.0";
+        public override string ModuleVersion => "v1.2.0-beta.1";
         public override string ModuleAuthor => "Sergey";
         public override string ModuleDescription => "GunGame mode for CS2";
 
@@ -3775,7 +3774,7 @@ namespace GunGame
 		}
         public bool IsValidPlayer(CCSPlayerController? p)
         {
-            if (p != null && p.IsValid && (p.SteamID.ToString().Length == 17 || (p.SteamID == 0 && p.IsBot)) && 
+            if (p != null && p.IsValid && 
                 p.Connected == PlayerConnectedState.PlayerConnected && !p.IsHLTV)
             {
                 if (!p.PlayerPawn.IsValid)

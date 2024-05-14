@@ -132,28 +132,28 @@ namespace GunGame.Tools
             else
                 result = GetSuitableSpawnPoint(slot, minDistance, spawns);
 
-            if (result == null)
-                Logger.LogInformation($"No suitable spawn points for player {slot}");
-
             return result!;
         }
 
         private SpawnInfo GetSuitableSpawnPoint(int slot, double minDistance, List<SpawnInfo> value)
         {
             // Shuffle the spawn points list to randomize the selection process
-            var shuffledSpawns = new List<SpawnInfo>(value);
+            var shuffledSpawns = value
+                .Select(t => (point: t, distance: PlayerManager.GetDistanceToClosestPlayer(slot, t.Position)))
+                .ToList();
 
             // Shuffle the copy
             shuffledSpawns.Shuffle();
             foreach (var spawn in shuffledSpawns)
             {
-                if (!PlayerManager.IsPlayerNearby(slot, spawn.Position, minDistance))
-                {
-                    return spawn;
-                }
+                if (spawn.distance > minDistance)
+                    return spawn.point;
             }
 
-            return null!;
+            return shuffledSpawns
+                .OrderByDescending(t => t.distance)
+                .Select(t => t.point)
+                .FirstOrDefault()!;
         }
         
         private SpawnInfo GetFarthestSpawnPoint(int slot, List<SpawnInfo> value)

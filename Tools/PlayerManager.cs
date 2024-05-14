@@ -95,8 +95,7 @@ namespace GunGame.Tools
 
         public double GetDistanceToClosestPlayer(int slot, Vector spawn)
         {
-            double minD = 10000.0;
-            double dist = minD;
+            double dist = double.MaxValue;
 
             if (playerMap.Count <= 1)
                 return dist;
@@ -110,17 +109,10 @@ namespace GunGame.Tools
                 if (pc == null || !Plugin.IsValidPlayer(pc))
                     continue;
 
-                if (pc.PlayerPawn != null && pc.Pawn != null &&
-                    pc.PlayerPawn.IsValid && pc.PlayerPawn.Value != null && pc.Pawn.IsValid && pc.Pawn.Value != null &&
-                    pc.PlayerPawn.Value.AbsOrigin != null)
-                {
-                    if (pc.Pawn.Value.LifeState != (byte)LifeState_t.LIFE_ALIVE)
-                        continue;
+                if (pc.PlayerPawn?.Value?.AbsOrigin == null || !pc.PlayerPawn.IsValid)
+                    continue;
 
-                    dist = PlayerDistance(spawn, pc.PlayerPawn.Value.AbsOrigin);
-                    if (dist < minD)
-                        minD = dist;
-                }
+                dist = Math.Min(dist, PlayerDistance(spawn, pc.PlayerPawn.Value.AbsOrigin));
             }
 
             return dist;
@@ -131,16 +123,6 @@ namespace GunGame.Tools
             return GetDistanceToClosestPlayer(slot, spawn) < minDistance;
         }
 
-        private static bool IsPlayerNearEntity(Vector entity, Vector player, double minDistance = 39.0)
-        {
-            // Calculate the squared distance to avoid the square root for performance reasons
-            float squaredDistance = (player.X - entity.X) * (player.X - entity.X) +
-                                    (player.Y - entity.Y) * (player.Y - entity.Y) +
-                                    (player.Z - entity.Z) * (player.Z - entity.Z);
-
-            // Compare squared distances (since sqrt is monotonic, the comparison is equivalent)
-            return squaredDistance <= minDistance * minDistance;
-        }
         private static double PlayerDistance(Vector entity, Vector player)
         {
             // Calculate the squared distance to avoid the square root for performance reasons
