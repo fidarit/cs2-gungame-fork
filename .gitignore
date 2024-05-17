@@ -48,9 +48,8 @@ Thumbs.db
 *.mov
 *.wmv
 
-
 /.vs
 obj/
 bin/
-
 *.user
+.DS_Store

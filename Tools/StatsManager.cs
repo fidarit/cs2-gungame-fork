@@ -220,8 +220,8 @@ namespace GunGame.Tools
                 Console.WriteLine("************** Database is not ready yet. Can't save Player Wins");
                 return;
             }
-            if (!_isDatabaseReady || player == null) return;
-            string safePlayerName = System.Net.WebUtility.HtmlEncode(player.PlayerName);
+            if (player == null) return;
+			string safePlayerName = System.Net.WebUtility.HtmlEncode(player.PlayerName);
             bool playerExists = false;
             string query = "SELECT `wins` FROM `gungame_playerdata` WHERE `authid` = @authid;";
             int wins = 0;

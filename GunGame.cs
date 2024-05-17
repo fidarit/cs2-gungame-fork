@@ -49,7 +49,7 @@ namespace GunGame
         private static PluginCapability<IAPI> APICapability { get; } = new("gungame:api");
         public bool LogConnections = false;
         public bool WeaponLoaded = false;
-        private bool warmupInitialized = false;
+        public bool warmupInitialized = false;
         private int WarmupCounter = 0;
         private bool IsObjectiveHooked = false;  
         
@@ -1534,7 +1534,7 @@ namespace GunGame
                 {
         /* An external function is called, which confirms whether to give a kill or not. If not, true is returned */
 //                    bool Accepted = RaisePointChangeEvent(Killer.Slot, kills);
-                    bool Accepted = CoreAPI.RaisePointChangeEvent(Killer.Slot, kills);
+                    bool Accepted = CoreAPI.RaisePointChangeEvent(Killer.Slot, kills, Victim.Slot);
 /*                    Call_StartForward(FwdPoint);
                     Call_PushCell(Killer);
                     Call_PushCell(kills);
