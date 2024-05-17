@@ -15,7 +15,7 @@ namespace GunGame.Tools
         private readonly object lockObject = new();
         private readonly Dictionary<int, GGPlayer> playerMap = new();
 
-        public GGPlayer? CreatePlayerBySlot(int slot)
+        public GGPlayer? InitPlayer(int slot)
         {
             if (slot < 0 || slot > Models.Constants.MaxPlayers)
                 return null;
@@ -29,6 +29,23 @@ namespace GunGame.Tools
                     playerMap.Add(slot, player);
                 }
             }
+            return player;
+        }
+
+        public GGPlayer? CreatePlayerBySlot(int slot)
+        {
+            if (slot < 0 || slot > Models.Constants.MaxPlayers)
+                return null;
+
+            if (!playerMap.TryGetValue(slot, out GGPlayer? player))
+            {
+                lock (lockObject)
+                {
+                    player = new GGPlayer(slot, Plugin);
+                    playerMap.Add(slot, player);
+                }
+            }
+
             if (player.Index == -1)
             {
                 var pc = Utilities.GetPlayerFromSlot(slot);
@@ -43,6 +60,7 @@ namespace GunGame.Tools
             }
             return player;
         }
+
         public GGPlayer? FindBySlot(int slot, string name = "")
         {
             if (playerMap.TryGetValue(slot, out GGPlayer? player))

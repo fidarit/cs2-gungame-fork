@@ -131,7 +131,7 @@ namespace GunGame
         public void SetLanguage()
         {
             var pl = Utilities.GetPlayerFromSlot(Slot);
-            if (pl == null || pl.AuthorizedSteamID == null)
+            if (pl == null || !Plugin.IsValidHuman(pl) || pl.AuthorizedSteamID == null)
                 return;
             Plugin.playerLanguageManager.SetLanguage(pl.AuthorizedSteamID, Culture);
             Plugin.Logger.LogInformation($"Set {Culture.DisplayName} language for {PlayerName}");
