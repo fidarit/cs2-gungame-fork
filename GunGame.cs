@@ -167,6 +167,8 @@ namespace GunGame
                 GGVariables.Instance.MapStatus = (Objectives)Config.RemoveObjectives;
                 GGVariables.Instance.WeaponsSkipFastSwitch = Config.FastSwitchSkipWeapons.Split(',')
                     .Select(weapon => $"weapon_{weapon.Trim()}").ToList();
+
+                ChangeFriendlyFire(cnfg.FriendlyFireAllowed);
             }
             catch (Exception ex)
             {
@@ -2796,6 +2798,10 @@ namespace GunGame
         {
             if (GGVariables.Instance.Mp_friendlyfire == null)
                 return;
+
+            if (Config.FriendlyFireAllowed)
+                Status = true;
+
             GGVariables.Instance.Mp_friendlyfire.Public = true; // set FCVAR_NOTIFY
             GGVariables.Instance.Mp_friendlyfire.SetValue(Status);
             string text;
@@ -3802,6 +3808,14 @@ namespace GunGame
             Config.IsPluginEnabled = false;
             GGVariables.Instance.IsActive = false;
             Server.ExecuteCommand("sv_cheats 1; endround; sv_cheats 0;");
+        }
+        [ConsoleCommand("ggff", "Change friendly fire")]
+        [RequiresPermissions("@css/rcon")]
+        public void OnChangeFriendlyFireCommand(CCSPlayerController? playerController, CommandInfo command)
+        {
+            Config.FriendlyFireAllowed = !Config.FriendlyFireAllowed;
+
+            ChangeFriendlyFire(Config.FriendlyFireAllowed);
         }
         [ConsoleCommand("css_lang", "Set Player's Language")]
         public async void OnLangCommand(CCSPlayerController? playerController, CommandInfo command)
