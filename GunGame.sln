@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GunGame", "GunGame.csproj", "{4155D656-46A4-415A-8AAD-9D9A19CA9A37}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GunGameAPI", "GunGameAPI\GunGameAPI.csproj", "{1AC90619-59C9-4B38-B0C4-74F0AC49041A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4155D656-46A4-415A-8AAD-9D9A19CA9A37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4155D656-46A4-415A-8AAD-9D9A19CA9A37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4155D656-46A4-415A-8AAD-9D9A19CA9A37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AC90619-59C9-4B38-B0C4-74F0AC49041A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AC90619-59C9-4B38-B0C4-74F0AC49041A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AC90619-59C9-4B38-B0C4-74F0AC49041A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AC90619-59C9-4B38-B0C4-74F0AC49041A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
